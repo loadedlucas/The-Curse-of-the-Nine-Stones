@@ -1,0 +1,97 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "data/levels/0.tmx",
+    "expandedProjectPaths": [
+        "graphics/player",
+        "data/levels",
+        "graphics/traps",
+        "graphics/traps/spikes",
+        ".",
+        "graphics/player/idle",
+        "graphics",
+        "data",
+        "data/tilesets",
+        "graphics/trees"
+    ],
+    "fileStates": {
+        "data/levels/0.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 2638,
+                "y": 933
+            }
+        },
+        "data/levels/forest.tsx": {
+            "scaleInDock": 0.5,
+            "scaleInEditor": 1
+        },
+        "data/tilesets/forest_bright.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 0.25,
+            "scaleInEditor": 1
+        },
+        "data/tilesets/night_forest.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 0.75,
+            "scaleInEditor": 1
+        },
+        "graphics/enemies/ninja/ninja.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "graphics/player/idle/idle.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "graphics/player/player.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "graphics/traps/spikes/spikes.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "graphics/trees/trees.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 0.33,
+            "scaleInEditor": 1
+        }
+    },
+    "last.imagePath": "/Users/lucas/Documents/The Curse of the Nine Stones/graphics/enemies/spider/idle",
+    "map.fixedSize": false,
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 128,
+    "map.tileWidth": 128,
+    "openFiles": [
+        "data/levels/0.tmx",
+        "data/tilesets/forest_bright.tsx",
+        "graphics/trees/trees.tsx",
+        "graphics/traps/spikes/spikes.tsx",
+        "graphics/player/player.tsx"
+    ],
+    "project": "CotNS.tiled-project",
+    "recentFiles": [
+        "graphics/enemies/ninja/ninja.tsx",
+        "graphics/player/player.tsx",
+        "graphics/traps/spikes/spikes.tsx",
+        "graphics/trees/trees.tsx",
+        "data/tilesets/forest_bright.tsx",
+        "data/levels/0.tmx",
+        "graphics/player/idle/idle.tsx",
+        "data/tilesets/night_forest.tsx",
+        "data/levels/forest.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 128,
+        "width": 128
+    },
+    "tileset.type": 1
+}
