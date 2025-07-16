@@ -9,7 +9,7 @@ class Player(pygame.sprite.Sprite):
 
         # image
         self.frames, self.frame_index = frames, 0
-        self.state, self.facing_right, self.sneak, self.attacking, self.attack_state = "idle", True, False, False, 0
+        self.state, self.facing_right = "idle", True
         self.image = self.frames[self.state][self.frame_index]
 
         # rects
@@ -21,8 +21,11 @@ class Player(pygame.sprite.Sprite):
         self.direction = vector()
         self.speed = 400
         self.gravity = 4800
-        self.jump = False
         self.jump_height = 2000
+        self.sneak = False
+        self.run = False
+        self.attacking = False
+        self.attack_state = 0
 
         # collision
         self.collision_sprites = collision_sprites
@@ -33,7 +36,9 @@ class Player(pygame.sprite.Sprite):
         self.timers = {
             "wall_jump": Timer(400),
             "wall_slide_block": Timer(300),
-            "platform_skip": Timer(100)
+            "platform_skip": Timer(100),
+            "jump_buffer": Timer(100),
+            "jump_buffer_fall": Timer(50),
         }
 
     def input(self):
@@ -55,14 +60,11 @@ class Player(pygame.sprite.Sprite):
                 self.run = True
             if keys[pygame.K_x]:
                 self.attack()
-            for event in events:
-                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                    self.attack()
             
             self.direction.x = input_vector.normalize().x if input_vector else input_vector.x
 
         if keys[pygame.K_UP] or keys[pygame.K_w] or keys[pygame.K_SPACE]:
-            self.jump = True
+            self.timers["jump_buffer"].activate()
 
     def attack(self):
         if not self.attacking:
@@ -78,7 +80,7 @@ class Player(pygame.sprite.Sprite):
         if not self.attacking:
             if self.sneak:
                 self.hitbox_rect.x += self.direction.x * self.speed / 2 * dt
-            elif self.run and any((self.on_surface["floor"], self.on_surface["platform"])):
+            elif self.run:
                 self.hitbox_rect.x += self.direction.x * self.speed * 1.5 * dt
             else:
                 self.hitbox_rect.x += self.direction.x * self.speed * dt
@@ -88,22 +90,30 @@ class Player(pygame.sprite.Sprite):
         if not self.on_surface["floor"] and any((self.on_surface["left"], self.on_surface["right"])) and not self.timers["wall_slide_block"].active and not self.sneak: # wall slide
             self.direction.y = 0
             self.hitbox_rect.y += self.gravity / 10 * dt
-        else: # apply gravity
+        elif self.on_surface["floor"] or self.on_surface["platform"]:
+            self.timers["jump_buffer_fall"].activate()
+        elif not self.timers["jump_buffer_fall"].active: # apply gravity after fall buffer expires
             self.direction.y += self.gravity / 2 * dt
             self.hitbox_rect.y += self.direction.y * dt
             self.direction.y += self.gravity / 2 * dt
+        else:
+            self.direction.y = 0
 
-        if self.jump:
-            self.jump = False
-            if self.on_surface["floor"] or self.on_surface["platform"]: # jump
+        if self.timers["jump_buffer"].active:
+            if self.on_surface["floor"] or self.on_surface["platform"] or self.timers["jump_buffer_fall"].active: # jump
                 self.direction.y = -self.jump_height
                 self.timers["wall_slide_block"].activate()
                 self.hitbox_rect.bottom -= 1
+
+                self.timers["jump_buffer_fall"].deactivate()
+
             elif any((self.on_surface["left"], self.on_surface["right"])) and not self.timers["wall_slide_block"].active and not self.sneak: # wall jump
                 self.timers["wall_jump"].activate()
                 self.direction.y = -self.jump_height
                 self.direction.x = 1 if self.on_surface["left"] else -1
 
+                self.timers["jump_buffer"].deactivate()
+            
         self.collisioin("vertical")
         self.semi_collisioin()
         self.rect.center = self.hitbox_rect.center
@@ -190,8 +200,8 @@ class Player(pygame.sprite.Sprite):
         self.update_timers()
 
         self.input()
-        self.move(dt)
         self.check_contact()
+        self.move(dt)
 
         self.get_state()
         self.animate(dt)
