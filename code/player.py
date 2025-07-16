@@ -20,9 +20,9 @@ class Player(pygame.sprite.Sprite):
         # movement
         self.direction = vector()
         self.speed = 400
-        self.gravity = 3200
+        self.gravity = 4800
         self.jump = False
-        self.jump_height = 1600
+        self.jump_height = 2000
 
         # collision
         self.collision_sprites = collision_sprites
