@@ -5,24 +5,26 @@
     },
     "activeFile": "data/levels/0.tmx",
     "expandedProjectPaths": [
-        "graphics/player",
-        "data/levels",
-        "graphics/traps",
-        "graphics/traps/spikes",
-        ".",
-        "graphics/player/idle",
         "graphics",
-        "data",
+        "graphics/enemies/ninja",
+        ".",
+        "data/levels",
+        "graphics/trees",
+        "graphics/traps",
+        "graphics/player/idle",
+        "graphics/traps/spikes",
         "data/tilesets",
-        "graphics/trees"
+        "data",
+        "graphics/player",
+        "graphics/enemies"
     ],
     "fileStates": {
         "data/levels/0.tmx": {
-            "scale": 0.5,
-            "selectedLayer": 4,
+            "scale": 0.25,
+            "selectedLayer": 6,
             "viewCenter": {
-                "x": 2638,
-                "y": 933
+                "x": 4124,
+                "y": 970
             }
         },
         "data/levels/forest.tsx": {
@@ -40,6 +42,10 @@
             "scaleInEditor": 1
         },
         "graphics/enemies/ninja/ninja.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "graphics/enemies/spider/spider.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
@@ -74,16 +80,18 @@
         "data/tilesets/forest_bright.tsx",
         "graphics/trees/trees.tsx",
         "graphics/traps/spikes/spikes.tsx",
-        "graphics/player/player.tsx"
+        "graphics/player/player.tsx",
+        "graphics/enemies/spider/spider.tsx"
     ],
     "project": "CotNS.tiled-project",
     "recentFiles": [
-        "graphics/enemies/ninja/ninja.tsx",
+        "graphics/enemies/spider/spider.tsx",
         "graphics/player/player.tsx",
         "graphics/traps/spikes/spikes.tsx",
         "graphics/trees/trees.tsx",
         "data/tilesets/forest_bright.tsx",
         "data/levels/0.tmx",
+        "graphics/enemies/ninja/ninja.tsx",
         "graphics/player/idle/idle.tsx",
         "data/tilesets/night_forest.tsx",
         "data/levels/forest.tsx"
