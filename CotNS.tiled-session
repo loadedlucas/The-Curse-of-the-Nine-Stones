@@ -5,23 +5,23 @@
     },
     "activeFile": "data/levels/0.tmx",
     "expandedProjectPaths": [
-        "graphics/player/idle",
         "graphics/traps",
-        "graphics/trees",
-        ".",
         "graphics/traps/spikes",
         "graphics/enemies",
-        "data/levels",
         "data/tilesets",
+        "graphics",
+        "data/levels",
+        ".",
         "graphics/player",
-        "data",
         "graphics/enemies/ninja",
-        "graphics"
+        "graphics/player/idle",
+        "graphics/trees",
+        "data"
     ],
     "fileStates": {
         "data/levels/0.tmx": {
             "scale": 0.25,
-            "selectedLayer": 6,
+            "selectedLayer": 5,
             "viewCenter": {
                 "x": 4124,
                 "y": 866

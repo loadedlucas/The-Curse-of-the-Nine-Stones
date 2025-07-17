@@ -31,31 +31,30 @@ class Level:
 
                 Sprite((x * TILE_SIZE, y * TILE_SIZE), surf, groups)
 
-        # objects
-        for layer in ["Objects", "Traps"]:
+        # player
+        for obj in tmx_map.get_layer_by_name("Objects"):
+            if obj.name == "player":
+                self.player = Player(
+                    pos = (obj.x, obj.y),
+                    groups = self.all_sprites,
+                    collision_sprites = self.collision_sprites,
+                    semi_collision_sprites = self.semi_collision_sprites,
+                    frames = level_frames["player"])
+
+        # foreground entities
+        for layer in ["Enemies", "Traps"]:
             for obj in tmx_map.get_layer_by_name(layer):
-                if obj.name == "player":
-                    self.player = Player(
-                        pos = (obj.x, obj.y),
-                        groups = self.all_sprites,
-                        collision_sprites = self.collision_sprites,
-                        semi_collision_sprites = self.semi_collision_sprites,
-                        frames = level_frames["player"])
+                if obj.name == "spider":
+                    Spider((obj.x, obj.y), level_frames["spider"], (self.all_sprites, self.damage_sprites, self.spider_sprites), self.collision_sprites)
                 else:
                     # frames
                     frames = level_frames[obj.name]
 
                     # groups
                     groups = [self.all_sprites]
-                    if obj.name in ["spikes"]: groups.append(self.collision_sprites)
 
-                    AnimatedSprite((obj.x, obj.y), frames, self.all_sprites)
+                    AnimatedSprite((obj.x, obj.y), frames, groups)
 
-        # enemies
-        for obj in tmx_map.get_layer_by_name("Enemies"):
-            if obj.name == "spider":
-                Spider((obj.x, obj.y), level_frames["spider"], (self.all_sprites, self.damage_sprites, self.spider_sprites), self.collision_sprites)
-            
     def run(self, dt):
         self.display_surface.fill("black")
         self.all_sprites.update(dt)
