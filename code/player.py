@@ -24,8 +24,12 @@ class Player(pygame.sprite.Sprite):
         self.jump_height = 2000
         self.sneak = False
         self.run = False
+
         self.attacking = False
         self.attack_state = 0
+
+        self.dash_direction = vector()
+        self.dash_speed = 8000
 
         # collision
         self.collision_sprites = collision_sprites
@@ -34,41 +38,56 @@ class Player(pygame.sprite.Sprite):
 
         # timer
         self.timers = {
-            "wall_jump": Timer(400),
+            "wall_jump": Timer(450),
             "wall_slide_block": Timer(300),
             "platform_skip": Timer(100),
             "jump_buffer": Timer(100),
             "jump_buffer_fall": Timer(50),
+            "dash": Timer(200),
+            "dash_cooldown": Timer(1000),
         }
 
     def input(self):
         keys = pygame.key.get_pressed()
-        events = pygame.event.get()
         input_vector = vector(0,0)
+        input_vector_dash = vector()
 
         if not self.timers["wall_jump"].active:
-            if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+            if keys[pygame.K_d]: # walk right
                 input_vector.x += 1
                 self.facing_right = True
-            if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+            if keys[pygame.K_a]: # walk left
                 input_vector.x -= 1
                 self.facing_right = False
-            if keys[pygame.K_DOWN] or keys[pygame.K_s]:
+            if keys[pygame.K_s]: # sneak
                 self.timers["platform_skip"].activate()
                 self.timers["jump_buffer_fall"].deactivate()
                 self.sneak = True
-            if keys[pygame.K_LSHIFT] and any((self.on_surface["floor"], self.on_surface["platform"])):
+            if keys[pygame.K_LSHIFT] and any((self.on_surface["floor"], self.on_surface["platform"])): # run
                 self.run = True 
-            if keys[pygame.K_x]:
+            if keys[pygame.K_x]: # attack
                 self.attack()
 
             self.direction.x = input_vector.normalize().x if input_vector else input_vector.x
 
-        if keys[pygame.K_UP] or keys[pygame.K_w] or keys[pygame.K_SPACE]:
+        if keys[pygame.K_w] or keys[pygame.K_SPACE]: # jump
             self.timers["jump_buffer"].activate()
+
+        if keys[pygame.K_RIGHT] and not self.timers["dash_cooldown"].active: # dash right
+            self.timers["dash"].activate()
+            self.timers["dash_cooldown"].activate()
+            input_vector_dash.x += 1
+            self.facing_right = True
+        if keys[pygame.K_LEFT] and not self.timers["dash_cooldown"].active: # dash left
+            self.timers["dash"].activate()
+            self.timers["dash_cooldown"].activate()
+            input_vector_dash.x -= 1
+            self.facing_right = False
 
         if not any((keys[pygame.K_d], keys[pygame.K_a])):
             self.run = False
+
+        self.dash_direction.x = input_vector_dash.normalize().x if input_vector_dash else input_vector_dash.x
 
     def attack(self):
         if not self.attacking:
@@ -91,7 +110,7 @@ class Player(pygame.sprite.Sprite):
         self.collisioin("horizontal")
 
         # vertical
-        if not self.on_surface["floor"] and any((self.on_surface["left"], self.on_surface["right"])) and not self.timers["wall_slide_block"].active and not self.sneak: # wall slide
+        if not self.on_surface["floor"] and any((self.on_surface["left"], self.on_surface["right"])) and not self.timers["wall_slide_block"].active and not self.timers["jump_buffer"].active and not self.sneak: # wall slide
             self.direction.y = 0
             self.hitbox_rect.y += self.gravity / 10 * dt
         elif any((self.on_surface["floor"], self.on_surface["platform"])) and not self.sneak:
@@ -100,7 +119,7 @@ class Player(pygame.sprite.Sprite):
             self.direction.y += self.gravity / 2 * dt
             self.hitbox_rect.y += self.direction.y * dt
             self.direction.y += self.gravity / 2 * dt
-        else:
+        elif not self.timers["wall_jump"]:
             self.direction.y = 0
 
         if self.timers["jump_buffer"].active:
@@ -111,16 +130,22 @@ class Player(pygame.sprite.Sprite):
 
                 self.timers["jump_buffer_fall"].deactivate()
 
-            elif any((self.on_surface["left"], self.on_surface["right"])) and not self.timers["wall_slide_block"].active and not self.sneak: # wall jump
+            elif any((self.on_surface["left"], self.on_surface["right"])) and not self.timers["wall_slide_block"].active and not self.timers["wall_jump"].active and not self.sneak: # wall jump
                 self.timers["wall_jump"].activate()
                 self.direction.y = -self.jump_height
-                self.direction.x = 1 if self.on_surface["left"] else -1
+                self.direction.x = 1.5 if self.on_surface["left"] else -1.5
 
-                self.timers["jump_buffer"].deactivate()
+                print("wall jump")
 
         self.collisioin("vertical")
         self.semi_collisioin()
         self.rect.center = self.hitbox_rect.center
+
+    def dash(self, dt):
+        if self.timers["dash"].active:
+            print("dashing")
+            self.hitbox_rect.x += self.dash_direction.x * self.dash_speed * dt
+            self.direction.y = 0
 
     def check_contact(self):
         floor_rect = pygame.Rect(self.hitbox_rect.bottomleft, (self.hitbox_rect.width, 2))
@@ -208,6 +233,7 @@ class Player(pygame.sprite.Sprite):
         self.input()
         self.check_contact()
         self.move(dt)
+        self.dash(dt)
 
         self.get_state()
         self.animate(dt)
