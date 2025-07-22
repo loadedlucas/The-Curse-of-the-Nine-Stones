@@ -29,7 +29,7 @@ class Player(pygame.sprite.Sprite):
         self.attack_state = 0
 
         self.dash_direction = vector()
-        self.dash_speed = 8000
+        self.dash_speed = 2000
 
         # collision
         self.collision_sprites = collision_sprites
@@ -43,7 +43,7 @@ class Player(pygame.sprite.Sprite):
             "platform_skip": Timer(100),
             "jump_buffer": Timer(100),
             "jump_buffer_fall": Timer(50),
-            "dash": Timer(200),
+            "dash": Timer(100),
             "dash_cooldown": Timer(1000),
         }
 
@@ -87,7 +87,8 @@ class Player(pygame.sprite.Sprite):
         if not any((keys[pygame.K_d], keys[pygame.K_a])):
             self.run = False
 
-        self.dash_direction.x = input_vector_dash.normalize().x if input_vector_dash else input_vector_dash.x
+        if input_vector_dash.x != 0:
+            self.dash_direction.x = input_vector_dash.normalize().x
 
     def attack(self):
         if not self.attacking:
@@ -143,7 +144,7 @@ class Player(pygame.sprite.Sprite):
 
     def dash(self, dt):
         if self.timers["dash"].active:
-            print("dashing")
+            print("dashing:", self.dash_direction)
             self.hitbox_rect.x += self.dash_direction.x * self.dash_speed * dt
             self.direction.y = 0
 
