@@ -1,6 +1,14 @@
 from settings import * 
 from os import walk
 from os.path import join, dirname, abspath
+import sys
+
+def resource_path(relative_path):
+	try:
+		base_path = sys._MEIPASS
+	except AttributeError:
+		base_path = abspath(".")
+	return join(base_path, relative_path)
 
 def import_image(*path, alpha = True, format = 'png'):
 	full_path = join(*path) + f'.{format}'

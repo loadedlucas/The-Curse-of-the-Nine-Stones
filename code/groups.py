@@ -9,11 +9,11 @@ class AllSprites(pygame.sprite.Group):
         self.cameraPos.y = 0
         self.offset = vector()
 
-    def draw(self, target_pos):
+    def draw(self, target_pos, dt):
         self.offset.x = -(target_pos[0] - WINDOW_WIDTH / 2)
         self.offset.y = -(target_pos[1] - 50 - WINDOW_HIGHT / 2)
         playerOffset = vector(self.offset.x - self.cameraPos.x, self.offset.y - self.cameraPos.y)
-        self.cameraPos += playerOffset * 0.1
+        self.cameraPos += playerOffset * 6 * dt
 
         for sprite in self:
             offset_pos = sprite.rect.topleft + self.cameraPos

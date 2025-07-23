@@ -8,12 +8,12 @@ from support import *
 class Game:
 	def __init__(self):
 		pygame.init()
-		self.display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HIGHT))
+		self.display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HIGHT), vsync = True)
 		pygame.display.set_caption("The Curse of the Nine Stones")
 		self.clock = pygame.time.Clock()
 		self.import_assets()
 
-		self.tmx_maps = {0: load_pygame(join(".", "data", "levels", "0.tmx"))}
+		self.tmx_maps = {0: load_pygame(resource_path("../data/levels/0.tmx"))}
 		self.current_level = Level(self.tmx_maps[0], self.level_frames)
 
 	def import_assets(self):
