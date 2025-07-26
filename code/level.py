@@ -1,5 +1,5 @@
 from settings import *
-from sprites import Sprite, AnimatedSprite
+from sprites import Sprite, AnimatedSprite, Item, ParticleEffectSprite
 from player import Player
 from groups import AllSprites
 from enemies import Spider
@@ -14,8 +14,12 @@ class Level:
         self.semi_collision_sprites = pygame.sprite.Group()
         self.damage_sprites = pygame.sprite.Group()
         self.spider_sprites = pygame.sprite.Group()
+        self.item_sprites = pygame.sprite.Group()
 
         self.setup(tmx_map, level_frames)
+
+        # frames
+        self.disappear_frames = level_frames["disappear"]
 
     def setup(self, tmx_map, level_frames):
         # trees
@@ -30,6 +34,10 @@ class Level:
                 if layer == "Platforms": groups.append(self.semi_collision_sprites)
 
                 Sprite((x * TILE_SIZE, y * TILE_SIZE), surf, groups)
+
+        # items
+        for obj in tmx_map.get_layer_by_name("Items"):
+            Item(obj.name, (obj.x, obj.y), level_frames["items"][obj.name], (self.all_sprites, self.item_sprites))
 
         # player
         for obj in tmx_map.get_layer_by_name("Objects"):
@@ -55,7 +63,14 @@ class Level:
 
                     AnimatedSprite((obj.x, obj.y), frames, groups)
 
+    def item_collision(self):
+        item_sprites = pygame.sprite.spritecollide(self.player, self.item_sprites, True)
+        if item_sprites:
+            ParticleEffectSprite((item_sprites[0].rect.center), self.disappear_frames, self.all_sprites)
+
     def run(self, dt):
         self.display_surface.fill("black")
+
         self.all_sprites.update(dt)
+        self.item_collision()
         self.all_sprites.draw(self.player.hitbox_rect.center, dt)

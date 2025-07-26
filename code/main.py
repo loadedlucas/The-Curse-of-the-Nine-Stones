@@ -13,7 +13,7 @@ class Game:
 		self.clock = pygame.time.Clock()
 		self.import_assets()
 
-		self.tmx_maps = {0: load_pygame(resource_path("../data/levels/0.tmx"))}
+		self.tmx_maps = {0: load_pygame(join("..", "data", "levels", "0.tmx"))}
 		self.current_level = Level(self.tmx_maps[0], self.level_frames)
 
 	def import_assets(self):
@@ -21,6 +21,8 @@ class Game:
 			"spikes": import_folder("..", "graphics", "traps", "spikes"),
 			"player": import_sub_folders("..", "graphics", "player"),
 			"spider": import_sub_folders("..", "graphics", "enemies", "spider"),
+			"items": import_sub_folders("..", "graphics", "items"),
+			"disappear": import_folder("..", "graphics", "particles", "disappear"),
 		}
 
 	def run(self):

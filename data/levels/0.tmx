@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="60" height="27" tilewidth="128" tileheight="128" infinite="0" nextlayerid="11" nextobjectid="47">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="60" height="27" tilewidth="128" tileheight="128" infinite="0" nextlayerid="12" nextobjectid="48">
  <tileset firstgid="1" source="../tilesets/night_forest.tsx"/>
  <tileset firstgid="199" source="../tilesets/forest_bright.tsx"/>
  <tileset firstgid="539" source="../../graphics/trees/trees.tsx"/>
  <tileset firstgid="541" source="../../graphics/traps/spikes/spikes.tsx"/>
  <tileset firstgid="551" source="../../graphics/player/player.tsx"/>
  <tileset firstgid="552" source="../../graphics/enemies/spider/spider.tsx"/>
+ <tileset firstgid="553" source="../../graphics/items/diamond/diamond.tsx"/>
  <layer id="6" name="Background" width="60" height="27">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -121,6 +122,9 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="11" name="Items">
+  <object id="47" name="diamond" gid="553" x="3072" y="1280" width="128" height="128"/>
+ </objectgroup>
  <objectgroup id="8" name="Traps">
   <object id="41" name="spikes" gid="541" x="2176" y="1280" width="256" height="256"/>
  </objectgroup>

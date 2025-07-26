@@ -45,7 +45,7 @@ class Player(pygame.sprite.Sprite):
             "jump_buffer": Timer(100),
             "jump_buffer_fall": Timer(50),
             "dash": Timer(150),
-            "dash_cooldown": Timer(1000),
+            "dash_cooldown": Timer(500),
         }
 
     def input(self):
@@ -121,6 +121,7 @@ class Player(pygame.sprite.Sprite):
             self.hitbox_rect.y += self.gravity / 10 * dt
         elif any((self.on_surface["floor"], self.on_surface["platform"])) and not self.sneak:
             self.timers["jump_buffer_fall"].activate()
+            self.direction.y = 0
         elif not self.timers["jump_buffer_fall"].active and self.direction.y <= self.terminal_velocity: # apply gravity after fall buffer expires
             self.direction.y += self.gravity / 2 * dt
             self.hitbox_rect.y += self.direction.y * dt
@@ -143,8 +144,6 @@ class Player(pygame.sprite.Sprite):
                 self.direction.y = -self.jump_height
                 self.direction.x = 1.5 if self.on_surface["left"] else -1.5
 
-                print("wall jump")
-
         self.collision("vertical")
         self.semi_collisioin()
         self.rect.center = self.hitbox_rect.center
@@ -156,7 +155,6 @@ class Player(pygame.sprite.Sprite):
         collide_rects = [sprite.rect for sprite in self.collision_sprites]
 
         if self.timers["dash"].active and collision_check.collidelist(collide_rects) < 0:
-            print("dashing:", self.dash_direction)
             self.hitbox_rect.x += self.dash_direction.x * self.dash_speed * dt
             self.hitbox_rect.y += self.dash_direction.y * self.dash_speed * dt
             self.direction.y = 0
